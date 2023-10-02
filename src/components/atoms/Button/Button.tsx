@@ -1,8 +1,10 @@
 import { FC } from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react';
+import { Theme } from '@mui/material/styles';
 
 interface ButtonProps {
+  theme?: Theme
   /**
    * What style button has?
    */
@@ -70,68 +72,68 @@ const button_base = css`
     line-height: 1.5em;
   }
 `
-const button_contained = css`
-  color:var(--paper);
-  background-color: var(--primary);
-  border-color: var(--primary);
+const button_contained = (theme:Theme) => css`
+  color:${theme.palette.common.white};
+  background-color: ${theme.palette.primary.main};
+  border-color: ${theme.palette.primary.main};
 
 &:hover{
-  background-color: var(--paper);
-  color: var(--primary);
-  border-color: var(--primary);
+  background-color: ${theme.palette.background.paper};
+  color: ${theme.palette.primary.main};
+  border-color: ${theme.palette.primary.main};
 }`
-const button_contained_disabled = css`
+const button_contained_disabled = (theme:Theme) => css`
   pointer-events: none;
-  background-color: var(--disabled);
-  border-color: var(--disabled);
+  background-color: ${theme.palette.action.disabled};
+  border-color: ${theme.palette.action.disabled};
 
 `
-const button_outlined = css`
-  color: var(--primary);
+const button_outlined = (theme:Theme) => css`
+  color: ${theme.palette.primary.main};
   background-color: transparent;
-  border-color: var(--primary);
+  border-color: ${theme.palette.primary.main};
 
 &:hover{
-  background-color: var(--primary);
-  color: var(--paper);
-  border-color: var(--primary);
+  background-color: ${theme.palette.primary.main};
+  color: ${theme.palette.background.paper};
+  border-color: ${theme.palette.primary.main};
 }
 `
-const button_outlined_disabled = css`
+const button_outlined_disabled = (theme:Theme) => css`
   pointer-events: none;
-  border-color: var(--disabled);
-  color: var(--disabled);
+  border-color: ${theme.palette.action.disabled};
+  color: ${theme.palette.action.disabled};
 `
 
-const button_text = css`
+const button_text = (theme:Theme) => css`
   border-color: transparent;
-  color: var(--primary);
+  color: ${theme.palette.primary.main};
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-position: under;
   padding-left: 0.2em;
   padding-right: 0.1em;
-  background-color: var(--paper);
+  background-color: ${theme.palette.background.paper};
 
 &:hover{
   text-decoration: none;
 }
 `
-const button_text_disabled = css`
+const button_text_disabled = (theme:Theme) => css`
   pointer-events: none;
-  color: var(--disabled);
+  color: ${theme.palette.action.disabled};
 `
 
-const button_variant_style = (variant:string='text', disabled:boolean=false) => {
+const button_variant_style = (variant:string='text', disabled:boolean=false, theme:any) => {
   switch(variant) { 
     case 'outlined': { 
-      return [button_outlined, disabled?button_outlined_disabled:null]
+      return [button_outlined(theme), disabled?button_outlined_disabled:null]
     } 
     case 'contained': { 
-      return [button_contained, disabled?button_contained_disabled:null]
+      return [button_contained(theme), disabled?button_contained_disabled:null]
     } 
     default: { 
-      return [button_text, disabled?button_text_disabled:null]
+      return [button_text(theme), disabled?button_text_disabled:null]
     } 
  } 
 }
@@ -139,6 +141,7 @@ const button_variant_style = (variant:string='text', disabled:boolean=false) => 
  * Primary UI component for user interaction
  */
 const StyledButton: FC<ButtonProps> = ({
+  theme,
   variant = 'contained',
   label,
   onClick,
@@ -148,7 +151,7 @@ const StyledButton: FC<ButtonProps> = ({
   targeturl,
   ...props
 }: ButtonProps) => {
- 
+  
   return (
     <>
       {!onClick?
@@ -173,7 +176,9 @@ const StyledButton: FC<ButtonProps> = ({
  </>
   )
 }
+
 export const Button = styled(StyledButton)`
   ${button_base}
-  ${(props:ButtonProps) => (button_variant_style(props.variant, props.disabled))};
+  ${(props:ButtonProps) => (button_variant_style(props.variant, props.disabled, props.theme))}
+  background-color: ${(props:any) => props.theme.palette.primary}
 `

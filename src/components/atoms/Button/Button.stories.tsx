@@ -2,6 +2,7 @@ import { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import type { Meta, StoryObj } from '@storybook/react'
 import { Button } from './Button';
 import { Icon } from '../Icon/Icon';
+import dark from '../../../themes/dark';
 
 const meta: Meta<typeof Button> = {
   title: 'Design System/Atoms/Button',
@@ -42,6 +43,6 @@ export const Text: Story = {
 
 export const WithIcon: Story = {
   render: () => (
-    <Button variant='contained' label='Button' endicon={ButtonContent}/>
+    <Button variant='contained' label='Button' endicon={ButtonContent} theme = {dark}/>
   )
 };

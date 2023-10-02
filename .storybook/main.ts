@@ -1,53 +1,36 @@
 import type { StorybookConfig } from '@storybook/nextjs';
 const config: StorybookConfig = {
-  stories: [
-    "../src/**/*.mdx",
-    "../src/**/*.stories.@(js|jsx|ts|tsx)",
-  
-  ],
+  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
   features: {
-    buildStoriesJson: true,
+    buildStoriesJson: true
   },
-  addons: [
-    "@storybook/addon-links",
-    "@storybook/addon-essentials",
-    "@storybook/preset-create-react-app",
-    "@storybook/addon-interactions",
-    '@storybook/addon-styling',
-    'storybook-addon-themes',
-    'storybook-addon-jsx',
-    '@storybook/addon-viewport'
-  ],
+  addons: ["@storybook/addon-links", "@storybook/addon-essentials", "@storybook/preset-create-react-app", "@storybook/addon-interactions", '@storybook/addon-styling', '@storybook-addon-jsx', '@storybook/addon-viewport', '@storybook/addon-mdx-gfm'],
   framework: {
     name: '@storybook/nextjs',
-    options: {},
+    options: {}
   },
   docs: {
-    autodocs: 'tag',
+    autodocs: 'tag'
   },
-  staticDirs: [
-    "../public"
-  ],
+  staticDirs: ["../public"],
   webpackFinal: async config => {
-    const imageRule = config.module?.rules?.find(rule => {
-      const test = (rule as { test: RegExp }).test
-
+    const imageRule = (config.module?.rules?.find(rule => {
+      const test = (rule as {
+        test: RegExp;
+      }).test;
       if (!test) {
-        return false
+        return false;
       }
-
-      return test.test('.svg')
-    }) as { [key: string]: any }
-
-    imageRule.exclude = /\.svg$/
-
+      return test.test('.svg');
+    }) as {
+      [key: string]: any;
+    });
+    imageRule.exclude = /\.svg$/;
     config.module?.rules?.push({
       test: /\.svg$/,
       use: ['@svgr/webpack']
-    })
-
-    return config
+    });
+    return config;
   }
-
 };
 export default config;
